@@ -1,0 +1,90 @@
+{% extends "base.html" %} 
+{# Este template sirve como puente para forzar la descarga de múltiples archivos (CSV y PDF) #}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <div class="p-5 mb-4 bg-info text-white rounded-3 shadow-lg">
+        <h1>
+            <i class="fas fa-spinner fa-spin me-3"></i> 
+            Iniciando Descarga Secuencial...
+        </h1>
+        <p class="lead">
+            Por favor, espere. La descarga de **hasta dos archivos** (CSV y/o PDF) comenzará en breve. 
+            El proceso es automático y no requiere ninguna acción adicional.
+        </p>
+    </div>
+    <div class="mt-4">
+        {# Enlace de retorno visible en caso de fallo, para que el usuario no quede atrapado #}
+        <a id="return-link" href="{{ redirect_url }}?alerta_error=Fallo_en_la_descarga_secuencial." class="btn btn-outline-secondary">
+            Volver a Gestión de Reportes
+        </a>
+    </div>
+</div>
+
+<script>
+    // Variables pasadas desde la vista DescargaSecuencialView
+    const csvUrl = "{{ csv_url }}";
+    const pdfUrl = "{{ pdf_url }}";
+    const redirectUrl = "{{ redirect_url }}";
+
+    // Configuraciones de tiempo (en milisegundos) para asegurar la descarga secuencial
+    // Ajuste estos valores si el navegador sigue bloqueando la segunda descarga.
+    const INITIAL_DELAY_MS = 100;     // Iniciar el primero casi inmediatamente
+    const DOWNLOAD_INTERVAL_MS = 1000;  // 1.0s de espera entre el primer y segundo archivo
+    const FINAL_REDIRECT_MS = 2500;     // 2.5s de espera antes de redirigir al final
+
+    function startDownloadChain() {
+        const hasCsv = csvUrl && csvUrl !== 'None';
+        const hasPdf = pdfUrl && pdfUrl !== 'None';
+
+        // --------------------------------------------------------
+        // Paso 1: Iniciar descarga CSV
+        // --------------------------------------------------------
+        if (hasCsv) {
+            setTimeout(() => {
+                const a = document.createElement('a');
+                a.href = csvUrl;
+                document.body.appendChild(a); // Se adjunta al body para mayor compatibilidad
+                a.click();
+                document.body.removeChild(a);
+                console.log("Descarga CSV iniciada");
+            }, INITIAL_DELAY_MS);
+        }
+        
+        // --------------------------------------------------------
+        // Paso 2: Iniciar descarga PDF
+        // --------------------------------------------------------
+        if (hasPdf) {
+            // Si hay CSV, el PDF espera el intervalo; si solo hay PDF, solo espera el delay inicial.
+            const pdfDelay = hasCsv ? INITIAL_DELAY_MS + DOWNLOAD_INTERVAL_MS : INITIAL_DELAY_MS;
+            
+            setTimeout(() => {
+                const a = document.createElement('a');
+                a.href = pdfUrl;
+                document.body.appendChild(a); 
+                a.click();
+                document.body.removeChild(a);
+                console.log("Descarga PDF iniciada");
+            }, pdfDelay);
+        }
+
+        // --------------------------------------------------------
+        // Paso 3: Redirigir al final
+        // --------------------------------------------------------
+        let totalDownloads = (hasCsv ? 1 : 0) + (hasPdf ? 1 : 0);
+        
+        // Si se descargan ambos, el delay es mayor. Si solo uno, es menor.
+        const finalDelay = (totalDownloads === 2) 
+            ? INITIAL_DELAY_MS + DOWNLOAD_INTERVAL_MS + FINAL_REDIRECT_MS 
+            : FINAL_REDIRECT_MS;
+
+        setTimeout(() => {
+            // Redirige al listado con el mensaje de éxito
+            window.location.href = redirectUrl + '?alerta_exito=Descarga secuencial completada. Sus archivos se han generado.';
+        }, finalDelay);
+    }
+
+    // Asegurar que el script se ejecuta solo después de que el DOM esté completamente cargado
+    document.addEventListener('DOMContentLoaded', startDownloadChain);
+</script>
+{% endblock content %}

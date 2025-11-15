@@ -1,0 +1,87 @@
+/* ========================================= */
+/* web_admin/static/web_admin/css/styles.css */
+/* ========================================= */
+
+/* Reset básico y fuente */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Para centrar verticalmente en toda la pantalla */
+}
+
+/* Contenedor principal de la página */
+.container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+}
+
+/* Estilo del Encabezado (Título) */
+header {
+    margin-bottom: 30px;
+    border-bottom: 3px solid #007bff; /* Color primario de administración */
+    padding-bottom: 15px;
+}
+
+header h1 {
+    color: #007bff;
+    font-size: 2em;
+    font-weight: 600;
+}
+
+/* Estilo del Mensaje Principal */
+main p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* Botón/Enlace de Acción */
+.btn-admin {
+    display: inline-block;
+    background-color: #28a745; /* Color secundario (éxito) */
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-admin:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+/* Estilo para la lista de pasos */
+.next-steps {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    text-align: left;
+}
+
+.next-steps li {
+    margin-bottom: 10px;
+    padding-left: 25px;
+    position: relative;
+    color: #555;
+}
+
+.next-steps li::before {
+    content: '✅';
+    position: absolute;
+    left: 0;
+}
