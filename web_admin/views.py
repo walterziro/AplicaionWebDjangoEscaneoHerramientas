@@ -63,6 +63,9 @@ class ReportarErrorView(View):
         if form.is_valid():
             reporte = form.save(commit=False)
             reporte.usuario = usuario_db
+            # Asignar la fecha del reporte al momento actual si no fue proporcionada
+            if not reporte.fecha_reporte:
+                reporte.fecha_reporte = timezone.now()
             reporte.estado = 'pendiente'
             reporte.save()
             form = ReporteUsuarioForm(initial={'usuario_uid': usuario_uid})

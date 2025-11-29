@@ -1,51 +1,47 @@
 {% extends "base.html" %} 
 
 {% block content %}
-<div class="container mt-5">
-    
-    <div class="p-4 mb-4 bg-primary text-white rounded-3">
-        <h2>Panel de Gestión: {{ admin_data.nombre }}</h2>
-        <p class="lead">Nivel de Acceso: <strong>{{ admin_data.nivel_acceso|capfirst }}</strong></p>
-        <p>Selecciona una opción para comenzar a gestionar la plataforma.</p>
-    </div>
+    <div class="mt-4">
 
-    <h3>Opciones de Administración</h3>
-    <hr>
+        <div class="p-4 mb-4 bg-primary text-white rounded-3">
+            <h2 class="h5">Panel de Gestión: {{ admin_data.nombre }}</h2>
+            <p class="small mb-1">Nivel de Acceso: <strong>{{ admin_data.nivel_acceso|capfirst }}</strong></p>
+            <p class="mb-0">Selecciona una opción para comenzar a gestionar la plataforma.</p>
+        </div>
 
-    <div class="row">
-        
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 border-success shadow">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-success">Gestión Directa de Datos</h5>
-                    <p class="card-text">Acceso al panel de Django para modificar, agregar y eliminar registros de Modelos, Herramientas y Administradores.</p>
-                    <a href="/admin/" class="btn btn-success btn-lg mt-2">
-                         Administrar Base de Datos
-                    </a>
+        <h3 class="h6">Opciones de Administración</h3>
+        <hr>
+
+        <div class="row gy-3">
+
+            <div class="col-12 col-md-6">
+                <div class="card h-100 border-success shadow-sm">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title text-success">Gestión Directa de Datos</h5>
+                        <p class="card-text flex-grow-1">Acceso al panel de Django para modificar, agregar y eliminar registros de Modelos, Herramientas y Administradores.</p>
+                        <a href="/admin/" class="btn btn-success mt-2">Administrar Base de Datos</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="col-md-6 mb-4">
-            <div class="card h-100 border-info shadow">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-info">Visualización y Gestión de Reportes</h5>
-                    <p class="card-text">Revisa, filtra y cambia el estado de los reportes enviados por los usuarios (Caso de Uso pendiente).</p>
-                    <a href="{% url 'web_admin:gestionar_reportes' %}" class="btn btn-info btn-lg mt-2">
-                         Ir a Gestión de Reportes
-                    </a>
+
+            <div class="col-12 col-md-6">
+                <div class="card h-100 border-info shadow-sm">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title text-info">Visualización y Gestión de Reportes</h5>
+                        <p class="card-text flex-grow-1">Revisa, filtra y cambia el estado de los reportes enviados por los usuarios (Caso de Uso pendiente).</p>
+                        <a href="{% url 'web_admin:gestionar_reportes' %}" class="btn btn-info mt-2">Ir a Gestión de Reportes</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-    </div>
-    
-    <div class="mt-5 text-center">
-        <form action="{% url 'admin:logout' %}" method="post" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-secondary">Cerrar Sesión</button>
-        </form>
-    </div>
 
-</div>
+        </div>
+
+        <div class="mt-4 text-center">
+            <form action="{% url 'admin:logout' %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary">Cerrar Sesión</button>
+            </form>
+        </div>
+
+    </div>
 {% endblock %}

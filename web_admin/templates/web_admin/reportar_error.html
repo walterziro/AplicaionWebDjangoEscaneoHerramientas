@@ -1,39 +1,45 @@
-<div style="max-width: 600px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-    <h2>{{ titulo }}</h2>
-    <p>Retroalimentación anónima con ID de dispositivo: <code>{{ usuario_anonimo_id }}</code></p>
-    <hr>
-    
-    {% if success_message %}
-        <div style="padding: 15px; margin-bottom: 20px; border: 1px solid #d4edda; color: #155724; background-color: #d4edda; border-radius: 4px;">
-            {{ success_message }}
-        </div>
-    {% endif %}
-    
-    <form method="post">
-        {% csrf_token %}
+{% extends "base.html" %}
 
-        {% for field in form %}
-            <div style="margin-bottom: 15px;">
-                {% if not field.is_hidden %}
-                    <label for="{{ field.id_for_label }}" style="display: block; font-weight: bold;">
-                        {{ field.label }}
-                    </label>
-                {% endif %}
-                
-                {{ field }}
-                
-                {% if field.errors %}
-                    <div style="color: red; font-size: 0.9em;">
-                        {% for error in field.errors %}
-                            {{ error }} 
-                        {% endfor %}
+{% load form_extras %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card mt-4 mb-4">
+            <div class="card-body">
+                <h4 class="card-title">{{ titulo }}</h4>
+                <p class="text-muted">Retroalimentación anónima con ID de dispositivo: <code>{{ usuario_anonimo_id }}</code></p>
+
+                {% if success_message %}
+                    <div class="alert alert-success" role="alert">
+                        {{ success_message }}
                     </div>
                 {% endif %}
-            </div>
-        {% endfor %}
 
-        <button type="submit" style="padding: 10px 15px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">
-            Enviar Retroalimentación
-        </button>
-    </form>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            {% if not field.is_hidden %}
+                                <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+                            {% endif %}
+                            {{ field|add_class:"form-control" }}
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in field.errors %}{{ error }}{% if not forloop.last %}<br>{% endif %}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-danger">Enviar Retroalimentación</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+{% endblock %}
